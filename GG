@@ -1,0 +1,45 @@
+import { useState } from "react";
+import QRCode from "qrcode.react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+export default function DatingApp() {
+  const [isPremium, setIsPremium] = useState(false);
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+  
+  const handlePaymentUpload = (event) => {
+    // Simulace ručního schválení platby
+    setPaymentConfirmed(true);
+  };
+  
+  return (
+    <div className="p-6 max-w-lg mx-auto">
+      <Card>
+        <CardContent>
+          <h2 className="text-xl font-bold">{isPremium ? "💎 Premium účet" : "👤 Zdarma verze"}</h2>
+          <ul className="mt-2">
+            <li>✅ {isPremium ? "50 lajků denně" : "25 lajků denně"}</li>
+            <li>✅ Filtrování podle lokality</li>
+            <li>✅ {isPremium ? "Zvýrazněný profil" : "Normální viditelnost profilu"}</li>
+            <li>✅ Chatovat lze jen po vzájemném lajku</li>
+            {isPremium && <li>📩 Možnost poslat 1 speciální zprávu denně</li>}
+          </ul>
+          {!isPremium && (
+            <div className="mt-4 text-center">
+              <h3 className="text-lg font-semibold">Aktivuj Premium za 50 Kč/měsíc</h3>
+              <QRCode value="https://www.qrplatba.cz/..." size={150} className="mx-auto my-2" />
+              <p>Naskenuj QR kód a zaplať 50 Kč.</p>
+              <Input type="file" onChange={handlePaymentUpload} className="mt-2" />
+              {paymentConfirmed && (
+                <Button className="mt-2" onClick={() => setIsPremium(true)}>
+                  Potvrdit aktivaci
+                </Button>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
